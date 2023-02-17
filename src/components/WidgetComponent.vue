@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" max-width="368">
+  <v-card v-if="showWidget === true" class="mx-auto" max-width="368">
     <v-card-item title="Florida">
       <template v-slot:subtitle>
         <v-icon
@@ -72,3 +72,8 @@
     </v-card-actions>
   </v-card>
 </template>
+<script lang="ts">
+export default {
+  props: ['showWidget'],
+};
+</script>

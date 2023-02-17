@@ -1,22 +1,34 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view />
-  <WidgetComponent></WidgetComponent>
+  <ButtonAddWidget></ButtonAddWidget>
+  <WidgetComponent :showWidget="showWidget"></WidgetComponent>
 </template>
+
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import WidgetComponent from '@/components/WidgetComponent.vue'; // @ is an alias to /src
+import ButtonAddWidget from '@/components/ButtonAddWidget.vue';
 
 @Options({
   components: {
     WidgetComponent,
+    ButtonAddWidget,
   },
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  data() {
+    return {
+      carts: [],
+      showWidget: true,
+    };
+  }
+  // methods:{
+  //   isShownWidget(): boolean{
+  //   return this.showWidget = !this.showWidget
+  //   }
+  //  }
+}
 </script>
+
 <style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
