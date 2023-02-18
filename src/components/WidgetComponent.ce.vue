@@ -1,5 +1,5 @@
 <template>
-  <v-card v-if="showWidget === true" class="mx-auto" max-width="368">
+  <v-card v-if="iswidgetshown === true" class="mx-auto" max-width="368">
     <v-card-item title="Florida">
       <template v-slot:subtitle>
         <v-icon
@@ -8,8 +8,7 @@
           color="error"
           class="me-1 pb-1"
         ></v-icon>
-
-        Extreme Weather Alert
+        <div class="red">Extreme Weather Alert</div>
       </template>
     </v-card-item>
 
@@ -32,7 +31,6 @@
         <v-list-item-subtitle>48%</v-list-item-subtitle>
       </v-list-item>
     </div>
-
     <v-expand-transition>
       <div v-if="expand">
         <div class="py-2">
@@ -73,7 +71,27 @@
   </v-card>
 </template>
 <script lang="ts">
-export default {
-  props: ['showWidget'],
-};
+import { Options, Vue } from 'vue-class-component';
+
+@Options({
+  props: {
+    iswidgetshown: Boolean,
+  },
+})
+export default class WidgetComponent extends Vue {
+  labels = { 0: 'SU', 1: 'MO', 2: 'TU', 3: 'WED', 4: 'TH', 5: 'FR', 6: 'SA' };
+  expand = false;
+  time = 0;
+  forecast = [
+    { day: 'Tuesday', icon: 'mdi-white-balance-sunny', temp: '24\xB0/12\xB0' },
+    {
+      day: 'Wednesday',
+      icon: 'mdi-white-balance-sunny',
+      temp: '22\xB0/14\xB0',
+    },
+    { day: 'Thursday', icon: 'mdi-cloud', temp: '25\xB0/15\xB0' },
+  ];
+}
 </script>
+
+<style scoped></style>

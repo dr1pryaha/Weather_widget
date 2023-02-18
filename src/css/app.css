@@ -1,0 +1,44 @@
+@font-face {
+  font-family: 'avenir-book';
+  src: local('avenir-book'), url('./fonts/Avenir-Book.woff2') format('woff2');
+  font-style: normal;
+  font-display: 'swap';
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'avenir-black';
+  src: local('avenir-black'), url('./fonts/Avenir-Black.woff2') format('woff2');
+  font-style: normal;
+  font-display: 'swap';
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'avenir-medium';
+  src: local('avenir-medium'),
+    url('./fonts/Avenir-Medium.woff2') format('woff2');
+  font-style: normal;
+  font-display: 'swap';
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: local('Roboto'), url('./fonts/Roboto-Regular.ttf') format('ttf');
+  font-style: normal;
+  font-display: 'swap';
+  font-weight: 400;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: 0;
+}
+
+body {
+  font-family: avenir-book, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+}

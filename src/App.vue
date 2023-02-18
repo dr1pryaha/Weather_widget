@@ -1,12 +1,14 @@
 <template>
-  <ButtonAddWidget></ButtonAddWidget>
-  <WidgetComponent :showWidget="showWidget"></WidgetComponent>
+  <ButtonAddWidget :showWidget="showWidget"></ButtonAddWidget>
+  <WidgetComponent :iswidgetshown="isWidgetShown"></WidgetComponent>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import WidgetComponent from '@/components/WidgetComponent.vue'; // @ is an alias to /src
+import WidgetComponent from '@/components/WidgetComponent.ce.vue';
+
 import ButtonAddWidget from '@/components/ButtonAddWidget.vue';
+import './css/app.css';
 
 @Options({
   components: {
@@ -15,17 +17,13 @@ import ButtonAddWidget from '@/components/ButtonAddWidget.vue';
   },
 })
 export default class App extends Vue {
-  data() {
-    return {
-      carts: [],
-      showWidget: true,
-    };
+  carts = [];
+
+  isWidgetShown = false;
+
+  showWidget(): boolean {
+    return (this.isWidgetShown = !this.isWidgetShown);
   }
-  // methods:{
-  //   isShownWidget(): boolean{
-  //   return this.showWidget = !this.showWidget
-  //   }
-  //  }
 }
 </script>
 
