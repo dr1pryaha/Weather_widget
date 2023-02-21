@@ -1,5 +1,5 @@
 <template>
-  <div class="widget-card">
+  <div v-if="iswidgetshown === true" class="widget-card">
     <div class="widget-gear">
       <svg
         @click="showContextMenu = !showContextMenu"
@@ -11,35 +11,33 @@
           d="M481.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-30.9 28.1c-7.7 7.1-11.4 17.5-10.9 27.9c.1 2.9 .2 5.8 .2 8.8s-.1 5.9-.2 8.8c-.5 10.5 3.1 20.9 10.9 27.9l30.9 28.1c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-39.7-12.6c-10-3.2-20.8-1.1-29.7 4.6c-4.9 3.1-9.9 6.1-15.1 8.7c-9.3 4.8-16.5 13.2-18.8 23.4l-8.9 40.7c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-8.9-40.7c-2.2-10.2-9.5-18.6-18.8-23.4c-5.2-2.7-10.2-5.6-15.1-8.7c-8.8-5.7-19.7-7.8-29.7-4.6L69.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l30.9-28.1c7.7-7.1 11.4-17.5 10.9-27.9c-.1-2.9-.2-5.8-.2-8.8s.1-5.9 .2-8.8c.5-10.5-3.1-20.9-10.9-27.9L8.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l39.7 12.6c10 3.2 20.8 1.1 29.7-4.6c4.9-3.1 9.9-6.1 15.1-8.7c9.3-4.8 16.5-13.2 18.8-23.4l8.9-40.7c2-9.1 9-16.3 18.2-17.8C213.3 1.2 227.5 0 242 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l8.9 40.7c2.2 10.2 9.4 18.6 18.8 23.4c5.2 2.7 10.2 5.6 15.1 8.7c8.8 5.7 19.7 7.7 29.7 4.6l39.7-12.6c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM242 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"
         />
       </svg>
-      <ContextMenu v-if="showContextMenu"></ContextMenu>
+      <ContextMenu
+        v-if="showContextMenu"
+        :cities="cities"
+        :deleteCity="deleteCity"
+        :addCity="addCity"
+        :putCityFirst="putCityFirst"
+      ></ContextMenu>
     </div>
 
     <div class="widget-card-item">
       <div class="widget-card-item__content">
-        <span class="widget-card-title">Florida</span>
+        <span class="widget-card-title">{{ cityName }}</span>
 
         <div class="widget-card-subtitle">
-          <font-awesome-icon icon="fa-solid fa-user-secret" />
-          <font-awesome-icon icon="fa-solid fa-triangle-exclamation" />
-          <i icon="mdi-alert" size="18" color="error" class="me-1 pb-1"></i>
-          <span>Extreme Weather Alert</span>
+          <span>{{ descriptionWeather }}</span>
         </div>
       </div>
     </div>
 
     <div class="widget-card-text">
       <div class="widget-card-text__row">
-        <h2 class="widget-card-text__col text-h2">64&deg;F</h2>
+        <h2 class="widget-card-text__col text-h2">{{ temperature }}&deg;C</h2>
         <div class="widget-card-text__col text-right">
-          <svg
+          <img
             class="text-right-icon"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 512 512"
-          >
-            <path
-              d="M361.5 1.2c5 2.1 8.6 6.6 9.6 11.9L391 121l107.9 19.8c5.3 1 9.8 4.6 11.9 9.6s1.5 10.7-1.6 15.2L446.9 256l62.3 90.3c3.1 4.5 3.7 10.2 1.6 15.2s-6.6 8.6-11.9 9.6L391 391 371.1 498.9c-1 5.3-4.6 9.8-9.6 11.9s-10.7 1.5-15.2-1.6L256 446.9l-90.3 62.3c-4.5 3.1-10.2 3.7-15.2 1.6s-8.6-6.6-9.6-11.9L121 391 13.1 371.1c-5.3-1-9.8-4.6-11.9-9.6s-1.5-10.7 1.6-15.2L65.1 256 2.8 165.7c-3.1-4.5-3.7-10.2-1.6-15.2s6.6-8.6 11.9-9.6L121 121 140.9 13.1c1-5.3 4.6-9.8 9.6-11.9s10.7-1.5 15.2 1.6L256 65.1 346.3 2.8c4.5-3.1 10.2-3.7 15.2-1.6zM160 256a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zm224 0a128 128 0 1 0 -256 0 128 128 0 1 0 256 0z"
-            />
-          </svg>
+            :src="`http://openweathermap.org/img/wn/${weatherIcon}@2x.png`"
+          />
         </div>
       </div>
     </div>
@@ -47,19 +45,32 @@
     <div class="widget-card-info">
       <div class="widget-card-info-wind">
         <div class="info-wind__prepand">
-          <font-awesome-icon class="icon-wind" icon="fa-solid fa-wind" />
+          <svg
+            class="icon-wind"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
+          >
+            <path
+              d="M288 32c0 17.7 14.3 32 32 32h32c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32 14.3-32 32s14.3 32 32 32H352c53 0 96-43 96-96s-43-96-96-96H320c-17.7 0-32 14.3-32 32zm64 352c0 17.7 14.3 32 32 32h32c53 0 96-43 96-96s-43-96-96-96H32c-17.7 0-32 14.3-32 32s14.3 32 32 32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H384c-17.7 0-32 14.3-32 32zM128 512h32c53 0 96-43 96-96s-43-96-96-96H32c-17.7 0-32 14.3-32 32s14.3 32 32 32H160c17.7 0 32 14.3 32 32s-14.3 32-32 32H128c-17.7 0-32 14.3-32 32s14.3 32 32 32z"
+            />
+          </svg>
         </div>
-        <div class="info-wind-speed">123 km/h</div>
+        <div class="info-wind-speed">{{ windSpeed }} km/h</div>
       </div>
 
       <div class="widget-card-info-precipitation">
         <div class="info-precipitation__prepand">
-          <font-awesome-icon
-            class="icon-precipitation"
-            icon="fa-solid fa-cloud-sun-rain"
-          />
+          <svg
+            class="icon-rain"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 384 512"
+          >
+            <path
+              d="M192 512C86 512 0 426 0 320C0 228.8 130.2 57.7 166.6 11.7C172.6 4.2 181.5 0 191.1 0h1.8c9.6 0 18.5 4.2 24.5 11.7C253.8 57.7 384 228.8 384 320c0 106-86 192-192 192zM96 336c0-8.8-7.2-16-16-16s-16 7.2-16 16c0 61.9 50.1 112 112 112c8.8 0 16-7.2 16-16s-7.2-16-16-16c-44.2 0-80-35.8-80-80z"
+            />
+          </svg>
         </div>
-        <div class="info-precipitation-probable">48%</div>
+        <div class="info-precipitation-probable">{{ humidity }} %</div>
       </div>
     </div>
 
@@ -67,47 +78,38 @@
 
     <div class="widget-card-actions">
       <button class="widget-card-actions-btn" @click="expand = !expand">
-        {{ !expand ? 'Full Report' : 'Hide Report' }}
+        {{ !expand ? 'Весь отчет' : 'Скрыть отчет' }}
       </button>
     </div>
 
-    <v-expand-transition>
-      <div v-if="expand">
-        <div class="py-2">
-          <v-slider
-            v-model="time"
-            :max="6"
-            :step="1"
-            :ticks="labels"
-            class="mx-4"
-            color="primary"
-            density="compact"
-            hide-details
-            show-ticks="always"
-            thumb-size="10"
-          ></v-slider>
+    <div v-if="expand">
+      <transition-group>
+        <div
+          v-for="item in fullReportWeather()"
+          :key="item.id"
+          class="full-report-item"
+        >
+          <div class="full-report-item__content" data-no-activator="">
+            <div class="full-report-item-title">{{ item.info }}</div>
+            <div class="full-report-item-subtitle">{{ item.result }}</div>
+            <!---->
+          </div>
         </div>
-
-        <v-list class="bg-transparent">
-          <v-list-item
-            v-for="item in forecast"
-            :key="item.day"
-            :title="item.day"
-            :append-icon="item.icon"
-            :subtitle="item.temp"
-          >
-          </v-list-item>
-        </v-list>
-      </div>
-    </v-expand-transition>
-
-    <v-divider></v-divider>
+      </transition-group>
+    </div>
+    <ErrorModal
+      :showModalError="showModalError"
+      :visiblilityModalError="visiblilityModalError"
+    ></ErrorModal>
   </div>
 </template>
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import { APIWeatherResponse } from '../interfaces/APIWeatherResponse';
-import ContextMenu from '@/components/ContextMenu.ce.vue';
+import ContextMenu from '@/components/ContextMenu.vue';
+import ErrorModal from '@/components/ErrorModal.vue';
+
+import { VueDraggableNext } from 'vue-draggable-next';
 
 @Options({
   props: {
@@ -115,38 +117,180 @@ import ContextMenu from '@/components/ContextMenu.ce.vue';
   },
   components: {
     ContextMenu,
+    ErrorModal,
+    draggable: VueDraggableNext,
   },
 })
 export default class WidgetCopy extends Vue {
-  labels = { 0: 'SU', 1: 'MO', 2: 'TU', 3: 'WED', 4: 'TH', 5: 'FR', 6: 'SA' };
   expand = false;
-  time = 0;
-  forecast = [
-    { day: 'Tuesday', icon: 'mdi-white-balance-sunny', temp: '24\xB0/12\xB0' },
-    {
-      day: 'Wednesday',
-      icon: 'mdi-white-balance-sunny',
-      temp: '22\xB0/14\xB0',
-    },
-    { day: 'Thursday', icon: 'mdi-cloud', temp: '25\xB0/15\xB0' },
-  ];
+
+  cities: Array<{ id: number | null; cityName: string | null }> =
+    localStorage.storedData ? JSON.parse(localStorage.storedData) : [];
+
+  nameOfCity = '';
+
+  deleteCity(id: number) {
+    this.cities = this.cities.filter((item) => {
+      return item.id !== id;
+    });
+  }
+
+  putCityFirst(id: number) {
+    const cityChanged = this.cities.find((item) => {
+      return id === item.id;
+    });
+    if (cityChanged !== undefined) {
+      this.cities = this.cities.filter((item) => {
+        return item.id !== id;
+      });
+      this.cities.unshift(cityChanged);
+    }
+    this.showContextMenu = !this.showContextMenu;
+  }
+
+  addCity(nameOfCity: string) {
+    const existedCity = this.cities.find((item) => {
+      return nameOfCity === item.cityName;
+    });
+    if (existedCity === undefined && nameOfCity.length !== 0) {
+      this.cities = [
+        ...this.cities,
+        {
+          id: this.cities.length + 1,
+          cityName: nameOfCity,
+        },
+      ];
+    }
+  }
+
   showContextMenu = false;
-  temperature: number;
-  API =
-    'https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=658b619abc07fc8e4c68187ec60efc61';
 
-  getApi = async () => {
-    console.log(this);
+  temperature: number | null = null;
+  cityName: string | null = null;
+  descriptionWeather: string | null = null;
+  windSpeed: number | null = null;
+  weatherIcon: string | null = null;
+  humidity: number | null = null;
+  tempFeelsLike: number | null = null;
+  pressure: number | null = null;
+  tempMax: number | null = null;
+  tempMin: number | null = null;
 
-    return fetch(this.API)
-      .then((response) => response.json())
+  fullReportWeather = () => {
+    return [
+      {
+        id: 0,
+        info: 'Температура ощущается как (\u00B0C)',
+        result: this.tempFeelsLike,
+      },
+      {
+        id: 1,
+        info: 'Атмосферное давление (мм рт. ст.)',
+        result: this.pressure,
+      },
+      {
+        id: 2,
+        info: 'Максимальная температура (\u00B0C)',
+        result: this.tempMax,
+      },
+      {
+        id: 3,
+        info: 'Минимальная температура (\u00B0C)',
+        result: this.tempMin,
+      },
+    ];
+  };
+
+  visiblilityModalError = false;
+  showModalError() {
+    this.visiblilityModalError = !this.visiblilityModalError;
+  }
+
+  latitude: string | null = null;
+  longitude: string | null = null;
+
+  async getPosition(): Promise<void | GeolocationPosition> {
+    return new Promise((resolve, reject) =>
+      navigator.geolocation.getCurrentPosition(resolve, reject)
+    )
+      .then((position: unknown) => {
+        const {
+          coords: { latitude, longitude },
+        } = position as GeolocationPosition;
+        this.latitude = latitude.toFixed(2);
+        this.longitude = longitude.toFixed(2);
+      })
+      .catch((error) => console.log(error));
+  }
+
+  getApiUrlParams(): string {
+    if (this.cities.length > 0) {
+      return `q=${this.cities[0].cityName}`;
+    } else if (this.latitude && this.longitude) {
+      return `lat=${this.latitude}&lon=${this.longitude}`;
+    }
+    return `q=Moscow`;
+  }
+
+  getApiUrl = () => {
+    return `https://api.openweathermap.org/data/2.5/weather?${this.getApiUrlParams()}&appid=658b619abc07fc8e4c68187ec60efc61&units=metric&lang=ru`;
+  };
+
+  getWeatherResponse = async () => {
+    return fetch(this.getApiUrl())
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          // throw new Error('City is undefined');
+          this.showModalError();
+        }
+      })
       .then<APIWeatherResponse>((res) => res);
   };
 
+  setWatchers() {
+    this.$watch(
+      'cities',
+      (newCities) => {
+        localStorage.storedData = JSON.stringify(newCities);
+        this.setData();
+      },
+      { deep: true }
+    );
+  }
+
+  //для первого запроса, когда cities пустой массив
+  setDefaultData() {
+    if (this.cities.length === 0) {
+      this.cities[0] = { id: 1, cityName: this.cityName };
+    }
+  }
+
+  async setData() {
+    try {
+      const weatherResponse = await this.getWeatherResponse();
+      this.cityName = weatherResponse.name;
+      this.temperature = Math.ceil(weatherResponse.main.temp);
+      this.descriptionWeather =
+        weatherResponse.weather[0].description.toUpperCase();
+      this.windSpeed = weatherResponse.wind.speed;
+      this.humidity = weatherResponse.main.humidity;
+      this.weatherIcon = weatherResponse.weather[0].icon;
+      this.tempFeelsLike = Math.ceil(weatherResponse.main.feels_like);
+      this.pressure = weatherResponse.main.pressure;
+      this.tempMax = Math.ceil(weatherResponse.main.temp_max);
+      this.tempMin = Math.ceil(weatherResponse.main.temp_min);
+      this.setDefaultData();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async created() {
-    const weatherResponse = await this.getApi();
-    console.log(weatherResponse);
-    this.temperature = weatherResponse.temperature;
+    this.setWatchers();
+    await this.getPosition();
+    this.setData();
   }
 }
 </script>
@@ -184,11 +328,16 @@ export default class WidgetCopy extends Vue {
 
 .gear-icon,
 .icon-delete,
-.icon-arrow {
+.icon-arrow,
+.icon-bar {
   font-size: 18px;
   height: 18px;
   width: 18px;
   cursor: pointer;
+}
+
+.icon-bar:hover {
+  fill: #1f6568;
 }
 
 .widget-card-item {
@@ -229,7 +378,7 @@ export default class WidgetCopy extends Vue {
 .widget-card-subtitle {
   display: block;
   flex: none;
-  font-size: 0.875rem;
+  font-size: 12px;
   font-weight: 400;
   text-align: center;
   letter-spacing: 0.0178571429em;
@@ -282,7 +431,8 @@ export default class WidgetCopy extends Vue {
   font-size: 88px;
   height: 88px;
   width: 88px;
-  fill: yellow;
+  background-color: #ffe4c4;
+  border-radius: 50%;
 }
 
 .widget-card-info {
@@ -320,10 +470,12 @@ export default class WidgetCopy extends Vue {
 }
 
 .icon-wind,
-.icon-precipitation {
+.icon-rain {
   -webkit-margin-end: 32px;
   margin-inline-end: 32px;
   opacity: 0.5;
+  height: 18px;
+  width: 18px;
 }
 
 .info-wind-speed,
@@ -352,7 +504,8 @@ export default class WidgetCopy extends Vue {
   border-width: thin 0 0 0;
 }
 
-.widget-card-actions {
+.widget-card-actions,
+.context-menu-actions {
   align-items: center;
   display: flex;
   flex: none;
@@ -360,7 +513,8 @@ export default class WidgetCopy extends Vue {
   padding: 0.5rem;
 }
 
-.widget-card-actions-btn {
+.widget-card-actions-btn,
+.context-menu-actions-btn {
   padding: 0 8px;
   box-shadow: 0px 0px 0px 0px
       var(--v-shadow-key-umbra-opacity, rgba(0, 0, 0, 0.2)),
@@ -401,6 +555,15 @@ export default class WidgetCopy extends Vue {
   cursor: pointer;
 }
 
+.widget-card-actions-btn:hover,
+.context-menu-actions-btn:hover {
+  background-color: #ffdd97;
+}
+
+.context-menu-actions-btn:active {
+  background-color: #a1cdd0;
+}
+
 .context-menu__wrapper {
   border-radius: inherit;
   bottom: 0;
@@ -415,12 +578,17 @@ export default class WidgetCopy extends Vue {
 
 .context-menu {
   width: 250px;
-  height: 250px;
-  background-color: #e4fcf9;
+  height: 300px;
+  background-color: #fffcee;
   position: absolute;
   top: 30px;
   z-index: 1;
   padding: 10px;
+}
+
+.context-menu-items {
+  height: 150px;
+  overflow-y: scroll;
 }
 
 .context-menu-title {
@@ -439,11 +607,11 @@ export default class WidgetCopy extends Vue {
 }
 
 .context-menu-item:hover {
-  background-color: #feffdf;
+  background-color: #ffdd97;
 }
 
 .icon-delete:hover {
-  fill: #f56262;
+  fill: #a63431;
   cursor: pointer;
 }
 
@@ -452,7 +620,7 @@ export default class WidgetCopy extends Vue {
   height: 40px;
   border: none;
   border-bottom: 1px solid cadetblue;
-  padding: 0;
+  padding-left: 10px;
   margin: 10px 0;
   outline: none;
 }
@@ -465,5 +633,136 @@ export default class WidgetCopy extends Vue {
 
 .icon-arrow:hover {
   fill: cadetblue;
+}
+
+.full-report-item {
+  min-height: 48px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 10px;
+}
+
+.full-report-item__content {
+  align-self: center;
+  grid-area: content;
+  overflow: hidden;
+}
+
+.full-report-item-title {
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  overflow-wrap: normal;
+  overflow: hidden;
+  padding: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: normal;
+  word-wrap: break-word;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.009375em;
+  line-height: 1.5rem;
+  text-transform: none;
+}
+
+.full-report-item-subtitle {
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  opacity: var(--v-medium-emphasis-opacity);
+  overflow: hidden;
+  padding: 0;
+  text-overflow: ellipsis;
+  font-size: 0.875rem;
+  font-weight: 400;
+  letter-spacing: 0.0178571429em;
+  line-height: 1rem;
+  text-transform: none;
+}
+
+.errorBar {
+  position: fixed;
+  inset: -10px 0px 0px;
+  z-index: 109;
+  background-color: rgba(0, 0, 0, 0.5);
+  visibility: visible;
+  opacity: 1;
+  transition: visibility 0ms ease 0ms, opacity 300ms ease 0ms;
+}
+
+.errorBarSection {
+  overflow: hidden;
+  position: absolute;
+  top: 10%;
+  left: 40%;
+  width: 18vw;
+  padding: 1px 14px 14px;
+  background-color: rgb(255, 255, 255);
+  opacity: 1;
+  transform: translateX(0px);
+  transition: all 300ms ease 100ms;
+  box-shadow: 0 3px 5px 0 rgb(0 0 0 / 20%);
+  border-radius: 15px;
+}
+
+.errorBarHeader {
+  display: flex;
+  flex-direction: column;
+  -webkit-box-align: center;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.headerCrossBtn {
+  margin-top: 10px;
+  flex: 0 0 auto;
+  align-self: flex-end;
+  outline: none;
+  cursor: pointer;
+}
+
+.headerCross {
+  vertical-align: middle;
+  box-sizing: content-box;
+  cursor: inherit;
+}
+
+.errorTitle {
+  text-align: left;
+  color: #881c1c;
+  font-size: 20px;
+}
+
+.errorDelivery {
+  color: #d15656;
+  cursor: pointer;
+}
+
+.errorDelivery:hover {
+  border-color: transparent;
+  color: #e88282;
+}
+
+.errorText {
+  text-align: left;
+  font-size: 16px;
+}
+
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #d6dee1;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a8bbbf;
 }
 </style>

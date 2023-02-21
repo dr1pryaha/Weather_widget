@@ -1,5 +1,15 @@
 export interface APIWeatherResponse {
-  temperature: number;
+  main: {
+    temp: number;
+    humidity: number;
+    feels_like: number;
+    pressure: number;
+    temp_max: number;
+    temp_min: number;
+  };
+  name: string;
+  weather: [{ description: string; icon: string }];
+  wind: { speed: number };
   // {
   //   "coord": {
   //     "lon": 10.99,

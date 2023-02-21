@@ -1,28 +1,14 @@
-<template>
-  <ButtonAddWidget :showWidget="showWidget"></ButtonAddWidget>
-  <WidgetComponent :iswidgetshown="isWidgetShown"></WidgetComponent>
-</template>
-
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import WidgetComponent from '@/components/WidgetComponent.ce.vue';
-
-import ButtonAddWidget from '@/components/ButtonAddWidget.vue';
+import { Vue } from 'vue-class-component';
 import './css/app.css';
 
-@Options({
-  components: {
-    WidgetComponent,
-    ButtonAddWidget,
-  },
-})
 export default class App extends Vue {
   carts = [];
 
-  isWidgetShown = false;
+  iswidgetshown = false;
 
   showWidget(): boolean {
-    return (this.isWidgetShown = !this.isWidgetShown);
+    return (this.iswidgetshown = !this.iswidgetshown);
   }
 }
 </script>
