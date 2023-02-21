@@ -2,15 +2,7 @@
 import { Vue } from 'vue-class-component';
 import './css/app.css';
 
-export default class App extends Vue {
-  carts = [];
-
-  iswidgetshown = false;
-
-  showWidget(): boolean {
-    return (this.iswidgetshown = !this.iswidgetshown);
-  }
-}
+export default class App extends Vue {}
 </script>
 
 <style lang="scss">

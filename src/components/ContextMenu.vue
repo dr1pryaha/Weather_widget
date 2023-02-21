@@ -28,6 +28,7 @@
     <div class="input-wrapper">
       <input
         v-model="nameOfCity"
+        @keydown.enter="handleArrowClick()"
         type="text"
         placeholder="Добавьте город"
         class="context-menu-input"
@@ -43,15 +44,6 @@
         />
       </svg>
     </div>
-    <!-- <div class="context-menu-actions">
-      <button
-        @click="setStorageData()"
-        :disabled="cities"
-        class="context-menu-actions-btn"
-      >
-        Сохранить настройки
-      </button>
-    </div> -->
   </div>
 </template>
 <script lang="ts">
@@ -87,10 +79,3 @@ export default class WidgetCopy extends Vue.with(Props) {
   }
 }
 </script>
-<style>
-.context-menu {
-  width: 250px;
-  height: 250px;
-  background-color: brown;
-}
-</style>
