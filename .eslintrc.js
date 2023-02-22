@@ -13,8 +13,13 @@ module.exports = {
     ecmaVersion: 2020,
   },
   rules: {
-    'prettier/prettier': ['error', { singleQuote: true, endOfLine: 'auto' }],
+    'vue/no-side-effects-in-computed-properties': 'off',
+    'prettier/prettier': [
+      'error',
+      { singleQuote: true, endOfLine: 'auto', arrowParens: 'always' },
+    ],
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
   },
+  globals: { GeolocationPosition: true },
 };
